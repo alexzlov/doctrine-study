@@ -11,6 +11,8 @@
     "minimum-stability": "stable",
     "require": {
         "yiisoft/yii": "~1.1",
-        "clevertech/yii-booster": "v4.0.1"
+        "clevertech/yii-booster": "v4.0.1",
+        "doctrine/orm": "2.4.*",
+        "symfony/yaml": "2.*"
     }
 }
