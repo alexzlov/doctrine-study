@@ -78,7 +78,7 @@ return array(
             'basePath' => __DIR__ . '/../',
             'proxyPath' => __DIR__ . '/../proxies',
             'entityPath' => array(
-                __DIR__ . '/../entities',
+                __DIR__ . '/../models',
             ),
             'driver' => 'pdo_mysql',
             'user' => 'skyeng',

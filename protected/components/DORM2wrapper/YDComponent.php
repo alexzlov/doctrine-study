@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
-class DoctrineComponent extends CComponent
+class YDComponent extends CComponent
 {
     private $em = null;
     private $basePath;
@@ -29,14 +29,14 @@ class DoctrineComponent extends CComponent
     {
         Yii::setPathOfAlias('Doctrine', $this->getBasePath() . '/vendor/Doctrine');
 
-        $cache = new Doctrine\Common\Cache\FilesystemCache($this->getBasePath() . '/cache');
+        $cache = new Doctrine\Common\Cache\FilesystemCache($this->getBasePath() . '../cache');
         $config = new Configuration();
         $config->setMetadataCacheImpl($cache);
 
 
         $driverImpl = new AnnotationDriver(new AnnotationReader(), $this->getEntityPath());
-        AnnotationRegistry::registerAutoloadNamespace('Doctrine\ORM\Mapping', $this->getBasePath() . '/vendor');
-
+//        AnnotationRegistry::registerAutoloadNamespace('Doctrine\ORM\Mapping', $this->getBasePath() . '/vendor/Doctrine');
+        AnnotationRegistry::registerFile($this->getBasePath() . '../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php');
         $config->setMetadataDriverImpl($driverImpl);
         $config->setQueryCacheImpl($cache);
         $config->setProxyDir($this->getProxyPath());

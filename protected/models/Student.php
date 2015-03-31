@@ -29,13 +29,28 @@ class Student extends CModel
     private $name;
 
     /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * @return array Associated teachers
      */
     protected $teachers;
 
     public function __construct()
     {
-        parent::__construct();
         $this->teachers = new DArrayCollection();
     }
 

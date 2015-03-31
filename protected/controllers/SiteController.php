@@ -67,7 +67,10 @@ class SiteController extends YDController
                 } else {
                     $personModel = new Student();
                 }
-                // @TODO: doctrine persist layer
+                $personModel->setName($person['name']);
+                $em = $this->getEntityManager();
+                $em->persist($personModel);
+                $em->flush();
                 $this->redirect(array('/site/createPerson'));
             }
         }
