@@ -16,7 +16,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
-        'application.components.DORM2wrapper.*',
+        'application.components.DORM2wrapper.YDController',
 	),
 
 	'modules'=>array(
@@ -72,6 +72,19 @@ return array(
             'class' => 'yiibooster.components.Booster',
             'responsiveCss' => true,
         ),
+        'doctrine' => array(
+            'class' => 'application.components.DORM2wrapper.YDComponent',
+            'basePath' => __DIR__ . '/../',
+            'proxyPath' => __DIR__ . '/../proxies',
+            'entityPath' => array(
+                __DIR__ . '/../entities',
+            ),
+            'driver' => 'pdo_mysql',
+            'user' => 'skyeng',
+            'password' => 'skyeng',
+            'host' => 'localhost',
+            'dbname' => 'skyeng',
+        )
 	),
 
 	// application-level parameters that can be accessed

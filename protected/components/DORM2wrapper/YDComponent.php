@@ -1,49 +1,59 @@
 <?php
 
-use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 
-Yii::import('YDController');
-Yii::import('YDBaseRepository');
-
-class YDComponent extends CApplicationComponent
+class DoctrineComponent extends CComponent
 {
-    private $em = null;         // entity manager
+    private $em = null;
     private $basePath;
     private $proxyPath;
     private $entityPath;
-    private $db;
+    private $driver;
+    private $user;
+    private $password;
+    private $host;
+    private $dbname;
+
+
 
     public function init()
     {
-        // Add alias path
-        Yii::setPathOfAlias('Doctrine', $this->getBasePath() . '/vendor/doctrine');
-        Yii::setPathOfAlias('Symfony', $this->getBasePath(). '/vendor/Symfony');
-
-        // Init DoctrineORM
         $this->initDoctrine();
-
-        parent::init();
     }
 
     public function initDoctrine()
     {
-        $cache = new Doctrine\Common\Cache\FilesystemCache(
-            $this->getBasePath() . '/../public/cache'
-        );
+        Yii::setPathOfAlias('Doctrine', $this->getBasePath() . '/vendor/Doctrine');
 
-        $config = Setup::createAnnotationMetadataConfiguration(
-            $this->entityPath, true
-        );
-
+        $cache = new Doctrine\Common\Cache\FilesystemCache($this->getBasePath() . '/cache');
+        $config = new Configuration();
         $config->setMetadataCacheImpl($cache);
+
+
+        $driverImpl = new AnnotationDriver(new AnnotationReader(), $this->getEntityPath());
+        AnnotationRegistry::registerAutoloadNamespace('Doctrine\ORM\Mapping', $this->getBasePath() . '/vendor');
+
+        $config->setMetadataDriverImpl($driverImpl);
         $config->setQueryCacheImpl($cache);
         $config->setProxyDir($this->getProxyPath());
         $config->setProxyNamespace('Proxies');
         $config->setAutoGenerateProxyClasses(true);
+        $connectionOptions = array(
+            'driver' => $this->getDriver(),
+            'user' => $this->getUser(),
+            'password' => $this->getPassword(),
+            'host' => $this->getHost(),
+            'dbname' => $this->getDbname()
+        );
 
-        $this->em = EntityManager::create($this->db, $config);
+        $this->em = EntityManager::create($connectionOptions, $config);
     }
+
+
 
     public function setBasePath($basePath)
     {
@@ -75,15 +85,56 @@ class YDComponent extends CApplicationComponent
         return $this->proxyPath;
     }
 
-    public function setDb($info)
+    public function setDbname($dbname)
     {
-        $this->db = $info;
+        $this->dbname = $dbname;
     }
 
-    public function getDb()
+    public function getDbname()
     {
-        return $this->db;
+        return $this->dbname;
     }
+
+    public function setDriver($driver)
+    {
+        $this->driver = $driver;
+    }
+
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
+    public function setHost($host)
+    {
+        $this->host = $host;
+    }
+
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
 
     /**
      * @return EntityManager
