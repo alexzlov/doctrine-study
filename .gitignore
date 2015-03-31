@@ -4,3 +4,6 @@
 /vendor/
 
 logs/*
+
+protected/runtime/*
+assets/*
