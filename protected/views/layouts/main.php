@@ -25,10 +25,6 @@
                         'items' => array(
                             array('label' => 'Создать учителя/ученика', 'url' => array('/site/createPerson')),
                             array('label' => 'Список учителей', 'url' => array('/site/teacherList')),
-                            array('label' => 'Задание, п.4', 'url' => array('/site/hasStudents')),
-                            array('label' => 'Задание, п.5', 'url' => array('/site/commonStudents')),
-                            array('label' => 'Войти', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
-                            array('label' => 'Выйти', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),
                         )
                     )
                 )

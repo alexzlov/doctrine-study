@@ -45,4 +45,32 @@ class SiteController extends YDController
 				$this->render('error', $error);
 		}
 	}
+
+    /**
+     * Создание нового учителя или ученика
+     */
+    public function actionCreatePerson()
+    {
+        $model = new CreatePersonForm();
+
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'create-person-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+
+        if (isset($_POST['CreatePersonForm'])) {
+            $model->attributes = $_POST['CreatePersonForm'];
+            if ($model->validate()) {
+                $person = $_POST['CreatePersonForm'];
+                if ($person['isTeacher']) {
+                    $personModel = new Teacher();
+                } else {
+                    $personModel = new Student();
+                }
+                // @TODO: doctrine persist layer
+                $this->redirect(array('/site/createPerson'));
+            }
+        }
+        $this->render('createPerson', array('model' => $model));
+    }
 }
