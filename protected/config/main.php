@@ -17,7 +17,7 @@ return array(
 		'application.models.*',
         'application.models.repositories.*',
 		'application.components.*',
-        'application.components.DORM2wrapper.YDController',
+        'application.components.DORM2wrapper.*',
 	),
 
 	'modules'=>array(

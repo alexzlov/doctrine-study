@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection as DArrayCollection;
 
 /**
  * Class Student
@@ -26,6 +27,17 @@ class Student extends CModel
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
+
+    /**
+     * @return array Associated teachers
+     */
+    protected $teachers;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->teachers = new DArrayCollection();
+    }
 
     public function attributeNames()
     {
