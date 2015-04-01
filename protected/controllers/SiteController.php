@@ -76,4 +76,41 @@ class SiteController extends YDController
         }
         $this->render('createPerson', array('model' => $model));
     }
+
+    /**
+     * Список учителей
+     */
+    public function actionTeacherList()
+    {
+        $dataProvider =  new CActiveDataProvider(Teacher::model(), array(
+            'sort' => array(
+                'defaultOrder' => array('id asc'),
+//                'attributes'   => array(
+//                    'id' => array(
+//                        'asc' => 'id asc',
+//                        'desc' => 'id desc',
+//                    ),
+//                    'name' => array(
+//                        'asc' => 'name asc',
+//                        'desc' => 'name desc',
+//                    ),
+//                    'studentCount'=> array(
+//                        'asc'   =>'(SELECT COUNT(id) FROM sky_relation WHERE teacherId = t.id)',
+//                        'desc'  =>'(SELECT COUNT(id) FROM sky_relation WHERE teacherId = t.id) DESC',
+//                        'default'=>'desc',
+//                    ),
+                ),
+
+            )
+        ));
+
+        if (Yii::app()->request->isAjaxRequest) {
+            $this->renderPartial('teacherTable', array(
+                'dataProvider' => $dataProvider,
+            ));
+        }
+        $this->render('teacherList', array(
+            'dataProvider' => $dataProvider,
+        ));
+    }
 }

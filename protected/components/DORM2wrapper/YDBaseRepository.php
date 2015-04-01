@@ -21,27 +21,159 @@ abstract class YDBaseRepository extends EntityRepository implements IDataProvide
     abstract protected function fetchData();
     abstract protected function calculateTotalItemCount();
 
-    public function getId() {}
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
 
-    public function getPagination($className = 'CPagination') {}
+    /**
+     * @param string $value
+     */
+    public function setId($value)
+    {
+        $this->_id = $value;
+    }
 
-    public function setPagination($value) {}
+    /**
+     * @param string $className
+     * @return CPagination|false
+     */
+    public function getPagination($className = 'CPagination')
+    {
+        if ($this->_pagination === null) {
+            $this->_pagination = new $className;
+            if (($id = $this->getId()) != '') {
+                $this->_pagination->pageVar = $id . '_page';
+            }
+        }
+        return $this->_pagination;
+    }
 
-    public function setSort($value) {}
+    public function setPagination($value)
+    {
+        if (is_array($value)) {
+            if (isset($value['class'])) {
+                $pagination = $this->getPagination($value['class']);
+                unset($value['class']);
+            } else {
+                $pagination = $this->getPagination();
+            }
 
-    public function getData($refresh = false) {}
+            foreach ($value as $k => $v) {
+                $pagination->$k = $v;
+            }
+        } else {
+            $this->_pagination = $value;
+        }
+    }
 
-    public function setData($refresh = false) {}
+    /**
+     * @param string $className
+     * @return CSort|false
+     */
+    public function getSort($className = 'CSort')
+    {
+        if ($this->_sort === null) {
+            $this->_sort = new $className;
+            if (($id = $this->getId()) != '') {
+                $this->_sort->sortVar = $id . '_sort';
+            }
+        }
+        return $this->_sort;
+    }
 
-    public function getKeys($refresh = false) {}
+    /**
+     * @param mixed $value
+     */
+    public function setSort($value)
+    {
+        if (is_array($value)) {
+            if (isset($value['class'])) {
+                $sort = $this->getSort($value['class']);
+                unset($value['class']);
+            } else {
+                $sort = $this->getSort();
+            }
 
-    public function setKeys($value) {}
+            foreach ($value as $k => $v) {
+                $sort->$k = $v;
+            }
+        } else {
+            $this->_sort = $value;
+        }
+    }
 
-    public function getItemCount($refresh = false) {}
+    /**
+     * @param bool $refresh
+     * @return array
+     */
+    public function getData($refresh = false)
+    {
+        if ($this->_data === null || $refresh) {
+            $this->_data = $this->fetchData();
+        }
+        return $this->_data;
+    }
 
-    public function getTotalItemCount($refresh = false) {}
+    /**
+     * @param array $value
+     */
+    public function setData($value)
+    {
+        $this->_data = $value;
+    }
 
-    public function setTotalItemCount($value) {}
+    /**
+     * @param bool $refresh
+     * @return array
+     */
+    public function getKeys($refresh = false)
+    {
+        if ($this->_keys === null || $refresh) {
+            $this->_keys = $this->fetchKeys();
+        }
+        return $this->_keys;
+    }
+
+    /**
+     * @param array $value
+     */
+    public function setKeys($value)
+    {
+        $this->_keys = $value;
+    }
+
+    /**
+     * @param bool $refresh
+     * @return int
+     */
+    public function getItemCount($refresh = false)
+    {
+        return count($this->getData($refresh));
+    }
+
+    /**
+     * @param bool $refresh
+     * @return integer
+     */
+    public function getTotalItemCount($refresh = false)
+    {
+        if ($this->_totalItemCount === null || $refresh) {
+            $this->_totalItemCount = $this->calculateTotalItemCount();
+        }
+        return $this->_totalItemCount;
+    }
+
+    /**
+     * @param integer $value
+     */
+    public function setTotalItemCount($value)
+    {
+        $this->_totalItemCount = $value;
+    }
 
     public function getCriteria() {}
 
@@ -51,9 +183,13 @@ abstract class YDBaseRepository extends EntityRepository implements IDataProvide
 
     public function setCountCriteria($value) {}
 
-    public function getSort($className = 'CSort') {}
-
-    protected function fetchKeys() {}
-
-    private function _getSort($className) {}
+    protected function fetchKeys()
+    {
+        $keys = array();
+        foreach ($this->getData() as $i => $data) {
+            $key = $this->keyAttribute === null ? $data->getPrimaryKey() : $data->{$this->keyAttribute};
+            $keys[$i] = is_array($key) ? implode(',', $key) : $key;
+        }
+        return $keys;
+    }
 }
