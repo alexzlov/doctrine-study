@@ -83,8 +83,6 @@ class SiteController extends YDController
     public function actionTeacherList()
     {
         $teachers = $this->getEntityManager()->getRepository('Teacher')->getAll();
-        echo('<pre>');
-        print_r($teachers);die;
 
         $dataProvider = new CArrayDataProvider($teachers, array(
             'id' => 'teacher-table',
@@ -101,32 +99,5 @@ class SiteController extends YDController
         $this->render('teacherList', array(
             'dataProvider' => $dataProvider,
         ));
-    }
-
-    public function actionTest()
-    {
-        $teachers = $this->getEntityManager()->getRepository('Teacher')->getAll();
-        echo("<pre>");
-        echo ("====================<br/>");
-        foreach ($teachers as $t) {
-            echo($t->getName() . "<br/>");
-            echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
-            foreach ($t->getStudents() as $student) {
-                echo("---" . $student->getName() . "<br/>");
-            }
-            echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
-        }
-
-        $students = $this->getEntityManager()->getRepository('Student')->getAll();
-        echo("<pre>");
-        echo ("====================<br/>");
-        foreach ($students as $s) {
-            echo($s->getName() . "<br/>");
-            echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
-            foreach ($s->getTeachers() as $teacher) {
-                echo("---" . $teacher->getName() . "<br/>");
-            }
-            echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
-        }
     }
 }
