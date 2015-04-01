@@ -6,4 +6,7 @@
 
 <h2>Список учителей</h2>
 <?php
-$this->renderPartial('teacherTable', array('dataProvider' => $dataProvider));
+$this->renderPartial('teacherTable', array(
+    'dataProvider' => $dataProvider,
+    'pages' => $pages,
+));

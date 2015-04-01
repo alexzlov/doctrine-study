@@ -84,12 +84,17 @@ class SiteController extends YDController
     {
         $teachers = $this->getEntityManager()->getRepository('Teacher')->getAll();
 
-        $dataProvider = new CArrayDataProvider($teachers, array(
+        $dataProvider = new CustomDataProvider($teachers['data'], array(
             'id' => 'teacher-table',
             'pagination' => array(
-                'pageSize' => 10,
-            )
+                'pageSize' => 5,
+            ),
         ));
+
+        $pages = new CPagination($teachers['itemCount']);
+        $pages->setPageSize(5);
+
+        $dataProvider->setTotalItemCount($teachers['itemCount']);
 
         if (Yii::app()->request->isAjaxRequest) {
             $this->renderPartial('teacherTable', array(
@@ -98,6 +103,7 @@ class SiteController extends YDController
         }
         $this->render('teacherList', array(
             'dataProvider' => $dataProvider,
+            'pages' => $pages,
         ));
     }
 }

@@ -17,6 +17,11 @@ $this->widget(
         'type' => 'striped',
         'dataProvider' => $dataProvider,
         'template' => "{items}",
+        'enablePagination' => true,
+        'pager' => array(
+            'class' => 'booster.widgets.TbPager',
+
+        ),
         'columns' => array(
             array(
                 'name'          => 'id',
@@ -53,3 +58,6 @@ $this->widget(
         )
     )
 );
+$this->widget('booster.widgets.TbPager', array(
+    'pages' => $pages,
+));
