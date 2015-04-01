@@ -80,9 +80,12 @@ class SiteController extends YDController
     /**
      * Список учителей
      */
-    public function actionTeacherList()
+    public function actionTeacherList($page = 1)
     {
-        $teachers = $this->getEntityManager()->getRepository('Teacher')->getAll();
+        $perPage = 5;
+        $teachersRepo = $this->getEntityManager()->getRepository('Teacher');
+        $teachersRepo->setPerPage($perPage);
+        $teachers = $teachersRepo->getAll($page);
 
         $dataProvider = new CustomDataProvider($teachers['data'], array(
             'id' => 'teacher-table',
@@ -96,11 +99,6 @@ class SiteController extends YDController
 
         $dataProvider->setTotalItemCount($teachers['itemCount']);
 
-        if (Yii::app()->request->isAjaxRequest) {
-            $this->renderPartial('teacherTable', array(
-                'dataProvider' => $dataProvider,
-            ));
-        }
         $this->render('teacherList', array(
             'dataProvider' => $dataProvider,
             'pages' => $pages,

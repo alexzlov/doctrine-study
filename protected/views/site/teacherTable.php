@@ -16,6 +16,7 @@ $this->widget(
     array(
         'type' => 'striped',
         'dataProvider' => $dataProvider,
+        'ajaxUpdate' => true,
         'template' => "{items}",
         'enablePagination' => true,
         'pager' => array(

@@ -4,7 +4,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class TeacherRepository extends YDBaseRepository
 {
-    protected $_perPage = 10;
+    protected $_perPage = 1;
 
     protected $_id = 'TeacherRepository';
 
@@ -53,8 +53,7 @@ class TeacherRepository extends YDBaseRepository
             ->createQuery($dql)
             ->setFirstResult(($pageNumber - 1) * $this->getPerPage())
             ->setMaxResults($this->getPerPage());
-        $paginator = new Paginator($query, $fetchJoinCollection = true);
-        $paginator->count();
+        $paginator = new Paginator($query, $fetchJoinCollection = true);;
         $output = array();
         foreach ($paginator as $teacher) {
             array_push($output, array(
