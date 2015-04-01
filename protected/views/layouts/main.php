@@ -25,6 +25,7 @@
                         'items' => array(
                             array('label' => 'Создать учителя/ученика', 'url' => array('/site/createPerson')),
                             array('label' => 'Список учителей', 'url' => array('/site/teacherList')),
+                            array('label' => 'Список студентов', 'url' => array('/site/studentList')),
                         )
                     )
                 )

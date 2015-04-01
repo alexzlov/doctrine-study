@@ -67,4 +67,34 @@ class TeacherRepository extends YDBaseRepository
             'data'      => $output,
         );
     }
+
+    public function studentsAssigned($teacherId)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $data = $qb->select('s')
+            ->from('Student', 's')
+            ->where($qb->expr()->in(
+                's.id',
+                $this->getEntityManager()->createQueryBuilder()->select('r.studentId')
+                    ->from('ModelRelation', 'r')
+                    ->where('r.teacherId='.$teacherId)->getDQL()
+            ));
+        $data = $data->getQuery()->getArrayResult();
+        return $data;
+    }
+
+    public function studentsNotAssigned($teacherId)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $data = $qb->select('s')
+            ->from('Student', 's')
+            ->where($qb->expr()->notIn(
+                's.id',
+                $this->getEntityManager()->createQueryBuilder()->select('r.studentId')
+                ->from('ModelRelation', 'r')
+                ->where('r.teacherId='.$teacherId)->getDQL()
+        ));
+        $data = $data->getQuery()->getArrayResult();
+        return $data;
+    }
 }

@@ -40,6 +40,14 @@ class Student extends CModel
     private $teachers;
 
     /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @param string $name
      */
     public function setName($name)

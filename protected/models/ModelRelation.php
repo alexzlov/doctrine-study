@@ -20,16 +20,18 @@ class ModelRelation
     private $id;
 
     /**
+     * @ORM\Column(name="teacherId", type="integer", nullable=false)
      * @ORM\ManyToOne(targetEntity="Teacher", inversedBy="studentRelations")
      * @ORM\JoinColumn(name="teacherId", referencedColumnName="id")
      */
-    private $teacher;
+    private $teacherId;
 
     /**
+     * @ORM\Column(name="studentId", type="integer", nullable=false)
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="teacherRelations")
      * @ORM\JoinColumn(name="studentId", referencedColumnName="id")
      */
-    private $student;
+    private $studentId;
 
     /**
      * @return integer
@@ -40,38 +42,38 @@ class ModelRelation
     }
 
     /**
-     * @param Teacher $teacher
+     * @param Teacher $teacherId
      * @return ModelRelation
      */
-    public function setTeacher(Teacher $teacher)
+    public function setTeacherId($teacherId)
     {
-        $this->teacher = $teacher;
+        $this->teacherId = $teacherId;
         return $this;
     }
 
     /**
      * @return Teacher
      */
-    public function getTeacher()
+    public function getTeacherId()
     {
-        return $this->teacher;
+        return $this->teacherId;
     }
 
     /**
-     * @param Student $student
+     * @param Student $studentId
      * @return ModelRelation
      */
-    public function setStudent(Student $student)
+    public function setStudentId($studentId)
     {
-        $this->student = $student;
+        $this->studentId = $studentId;
         return $this;
     }
 
     /**
      * @return Student
      */
-    public function getStudent()
+    public function getStudentId()
     {
-        return $this->student;
+        return $this->studentId;
     }
 }

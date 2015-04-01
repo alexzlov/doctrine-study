@@ -57,10 +57,14 @@ class StudentRepository extends YDBaseRepository
         $output = array();
         foreach ($paginator as $student) {
             array_push($output, array(
+                'id' => $student->getId(),
                 'name' => $student->getName(),
                 'studentCount' => count($student->getTeachers())
             ));
         }
-        return $output;
+        return array(
+            'itemCount' => $paginator->count(),
+            'data'      => $output,
+        );
     }
 }

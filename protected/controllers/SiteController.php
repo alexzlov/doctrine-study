@@ -79,6 +79,7 @@ class SiteController extends YDController
 
     /**
      * Список учителей
+     * @param integer $page
      */
     public function actionTeacherList($page = 1)
     {
@@ -90,7 +91,7 @@ class SiteController extends YDController
         $dataProvider = new CustomDataProvider($teachers['data'], array(
             'id' => 'teacher-table',
             'pagination' => array(
-                'pageSize' => 5,
+                'pageSize' => $perPage,
             ),
         ));
 
@@ -103,5 +104,116 @@ class SiteController extends YDController
             'dataProvider' => $dataProvider,
             'pages' => $pages,
         ));
+    }
+
+    /**
+     * Список студентов
+     * @param integer $page
+     */
+    public function actionStudentList($page = 1)
+    {
+        $perPage = 5;
+        $studentRepo = $this->getEntityManager()->getRepository('Student');
+        $studentRepo->setPerPage($perPage);
+        $students = $studentRepo->getAll($page);
+
+        $dataProvider = new CustomDataProvider($students['data'], array(
+            'id' => 'teacher-table',
+            'pagination' => array(
+                'pageSize' => $perPage,
+            ),
+        ));
+
+        $pages = new CPagination($students['itemCount']);
+        $pages->setPageSize(5);
+
+        $dataProvider->setTotalItemCount($students['itemCount']);
+
+        $this->render('studentList', array(
+            'dataProvider' => $dataProvider,
+            'pages' => $pages,
+        ));
+    }
+
+    /**
+     * Находит студентов, НЕ назначенных выбранному учителю,
+     * и рендерит в ajax соответствующую форму для их выбора
+     * @param $id int id преподавателя
+     */
+    public function actionAssignStudent($id)
+    {
+        if (!$id) {
+            echo("Такой преподаватель не найден :(");
+            Yii::app()->end();
+        }
+        $teacher = $this->getEntityManager()->find('Teacher', $id);
+        $studentsAssigned    = $this->getEntityManager()->getRepository('Teacher')->studentsAssigned($id);
+        $SADataprovider = new CustomDataProvider($studentsAssigned);
+        $SADataprovider->setTotalItemCount(count($studentsAssigned));
+        $studentsNotAssigned = $this->getEntityManager()->getRepository('Teacher')->studentsNotAssigned($id);
+        $out = array();
+        foreach ($studentsNotAssigned as $student) {
+            $out[$student['id']] = $student['name'];
+        }
+        $this->render('studentsToAssign', array(
+            'studentsNotAssigned'   => $out,
+            'studentsAssigned'      => $SADataprovider,
+            'teacher'               => $teacher,
+        ));
+    }
+
+    /**
+     * Сохраняет закрепленных за преподавателем студентов
+     * @param $id int id преподавателя
+     */
+    public function actionSaveStudents($id)
+    {
+        $redirectUrl = array('/site/teacherList');
+        if (!array_key_exists('students-list', $_POST) || !$id) {
+            $this->redirect($redirectUrl);
+        }
+        $studentIds = $_POST['students-list'];
+        if (!count($studentIds)) {
+            $this->redirect($redirectUrl);
+        }
+
+        $em = $this->getEntityManager();
+
+        foreach ($studentIds as $studentId) {
+            $rel = new ModelRelation();
+            $rel->setTeacherId($id);
+            $rel->setStudentId($studentId);
+            $em->persist($rel);
+        }
+        $em->flush();
+        $this->redirect($redirectUrl);
+    }
+
+    /**
+     * Редактирование студента
+     * @param integer $id
+     */
+    public function actionEditStudent($id)
+    {
+        $student = $this->getEntityManager()->find('Student', $id);
+
+        $model = new StudentForm();
+        $model->name = $student->getName();
+
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'student-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+
+        if (isset($_POST['StudentForm'])) {
+            $newName = $_POST['StudentForm']['name'];
+            $em = $this->getEntityManager();
+
+            $student = $em->find('Student', $id);
+            $student->setName($newName);
+            $em->flush();
+            $this->redirect(array('/site/studentList'));
+        }
+        $this->render('editStudent', array('model' => $model));
     }
 }
