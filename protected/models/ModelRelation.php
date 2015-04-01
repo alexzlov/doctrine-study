@@ -14,17 +14,19 @@ class ModelRelation
      * var integer
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Teacher", inversedBy="teachers")
+     * @ORM\ManyToOne(targetEntity="Teacher", inversedBy="studentRelations")
      * @ORM\JoinColumn(name="teacherId", referencedColumnName="id")
      */
     private $teacher;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Student", inversedBy="students")
+     * @ORM\ManyToOne(targetEntity="Student", inversedBy="teacherRelations")
      * @ORM\JoinColumn(name="studentId", referencedColumnName="id")
      */
     private $student;

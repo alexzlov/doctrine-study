@@ -99,7 +99,7 @@ class SiteController extends YDController
 //                        'desc'  =>'(SELECT COUNT(id) FROM sky_relation WHERE teacherId = t.id) DESC',
 //                        'default'=>'desc',
 //                    ),
-                ),
+//                ),
 
             )
         ));
@@ -112,5 +112,15 @@ class SiteController extends YDController
         $this->render('teacherList', array(
             'dataProvider' => $dataProvider,
         ));
+    }
+
+    public function actionTest()
+    {
+        $teachers = $this->getEntityManager()->getRepository('Teacher')->getAll();
+        echo("<pre>");
+        echo ("====================<br/>");
+        foreach ($teachers as $t) {
+            echo($t->getName() . "<br/>");
+        }
     }
 }

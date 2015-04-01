@@ -47,11 +47,11 @@ class Student extends CModel
     /**
      * @return array Associated teachers
      */
-    protected $teachers;
+    protected $teacherRelations;
 
     public function __construct()
     {
-        $this->teachers = new DArrayCollection();
+        $this->teacherRelations = new DArrayCollection();
     }
 
     public function attributeNames()
@@ -68,5 +68,21 @@ class Student extends CModel
             'id'        => 'id',
             'name'      => 'Имя студента',
         );
+    }
+
+    public function addTeacherRelation(ModelRelation $relation)
+    {
+        $this->teacherRelations[] = $relation;
+        return $this;
+    }
+
+    public function removeTeacherRelation(ModelRelation $relation)
+    {
+        $this->teacherRelations->removeElement($relation);
+    }
+
+    public function getTeacherRelations()
+    {
+        return $this->teacherRelations;
     }
 }
