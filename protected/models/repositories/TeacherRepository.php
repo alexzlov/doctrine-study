@@ -54,6 +54,13 @@ class TeacherRepository extends YDBaseRepository
             ->setFirstResult(($pageNumber - 1) * $this->getPerPage())
             ->setMaxResults($this->getPerPage());
         $paginator = new Paginator($query, $fetchJoinCollection = true);
-        return $paginator;
+        $output = array();
+        foreach ($paginator as $teacher) {
+            array_push($output, array(
+                'name' => $teacher->getName(),
+                'studentCount' => count($teacher->getStudents())
+            ));
+        }
+        return $output;
     }
 }
