@@ -37,7 +37,7 @@ $this->widget(
             array(
                 'htmlOptions'       => array('nowrap'=>'nowrap'),
                 'class'             => 'TbIdButtonColumn',
-                'template'          => '{assign_student}',
+                'template'          => '{assign_student} {delete_student}',
                 'buttons'           => array(
                     'assign_student'    => array(
                         'label'             => '',
@@ -46,6 +46,16 @@ $this->widget(
                             'class'             => 'glyphicon glyphicon-user',
                             'data-toggle'       => 'tooltip',
                             'title'             => 'Редактировать',
+                            'id'                => '$data["id"]'
+                        ),
+                    ),
+                    'delete_student'    => array(
+                        'label'         => 'Удалить',
+                        'url'           => 'Yii::app()->createUrl("/site/deleteStudent", array("id"=>$data["id"]))',
+                        'options'           => array(
+//                            'class'             => 'glyphicon glyphicon-user',
+                            'data-toggle'       => 'tooltip',
+                            'title'             => 'Удалить',
                             'id'                => '$data["id"]'
                         ),
                     )

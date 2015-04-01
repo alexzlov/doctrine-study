@@ -216,4 +216,16 @@ class SiteController extends YDController
         }
         $this->render('editStudent', array('model' => $model));
     }
+
+    /**
+     * Удаление студента
+     */
+    public function actionDeleteStudent($id)
+    {
+        $em = $this->getEntityManager();
+        $student = $em->find('Student', $id);
+        $em->remove($student);
+        $em->flush();
+        $this->redirect(array('/site/studentList'));
+    }
 }
