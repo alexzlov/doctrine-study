@@ -127,5 +127,17 @@ class SiteController extends YDController
             }
             echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
         }
+
+        $students = $this->getEntityManager()->getRepository('Student')->getAll();
+        echo("<pre>");
+        echo ("====================<br/>");
+        foreach ($students as $s) {
+            echo($s->getName() . "<br/>");
+            echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
+            foreach ($s->getTeachers() as $teacher) {
+                echo("---" . $teacher->getName() . "<br/>");
+            }
+            echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
+        }
     }
 }

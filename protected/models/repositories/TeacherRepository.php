@@ -29,8 +29,9 @@ class TeacherRepository extends YDBaseRepository
      */
     public function setPerPage($itemNumber)
     {
-        if (!$itemNumber) return;
-        $this->_perPage = $itemNumber;
+        if ($itemNumber) {
+            $this->_perPage = $itemNumber;
+        }
     }
 
     /**
