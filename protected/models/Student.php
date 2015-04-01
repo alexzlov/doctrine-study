@@ -29,6 +29,17 @@ class Student extends CModel
     private $name;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Teacher", inversedBy="sky_student")
+     * @ORM\JoinTable(name="sky_relation",
+     *      joinColumns={@ORM\JoinColumn(name="studentId", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="teacherId", referencedColumnName="id")}
+     * )
+     */
+    private $teachers;
+
+    /**
      * @param string $name
      */
     public function setName($name)
@@ -44,14 +55,9 @@ class Student extends CModel
         return $this->name;
     }
 
-    /**
-     * @return array Associated teachers
-     */
-    protected $teacherRelations;
-
     public function __construct()
     {
-        $this->teacherRelations = new DArrayCollection();
+        $this->teachers = new DArrayCollection();
     }
 
     public function attributeNames()
@@ -70,19 +76,19 @@ class Student extends CModel
         );
     }
 
-    public function addTeacherRelation(ModelRelation $relation)
+    public function addTeacher(ModelRelation $relation)
     {
-        $this->teacherRelations[] = $relation;
+        $this->teachers[] = $relation;
         return $this;
     }
 
-    public function removeTeacherRelation(ModelRelation $relation)
+    public function removeTeacher(ModelRelation $relation)
     {
-        $this->teacherRelations->removeElement($relation);
+        $this->teachers->removeElement($relation);
     }
 
-    public function getTeacherRelations()
+    public function getTeachers()
     {
-        return $this->teacherRelations;
+        return $this->teachers;
     }
 }

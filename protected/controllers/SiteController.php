@@ -121,6 +121,11 @@ class SiteController extends YDController
         echo ("====================<br/>");
         foreach ($teachers as $t) {
             echo($t->getName() . "<br/>");
+            echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
+            foreach ($t->getStudents() as $student) {
+                echo("---" . $student->getName() . "<br/>");
+            }
+            echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>");
         }
     }
 }
